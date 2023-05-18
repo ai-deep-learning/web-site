@@ -83,19 +83,19 @@ It my setup it was giving strange errors about not sufficient memory - unable to
 
 Set disk size to 150 Gb
 
-* Create a notebook on ml.t3.medium - 250 hours/months are provided for free for the first 2 months. Customize to have 150 Gb storage
+* Create a notebook on ml.t3.2xlarge. ml.t3.xlarge and below are too small. I did not try ml.t3.2xlarge yet. Customize to have 150 Gb storage. Note: tried ml.m5.4xlarge, but it was exceeding my quota so I'm trying 2xlarge first. 2x is dying, requested quotas increase at https://us-east-1.console.aws.amazon.com/servicequotas/home/
 * Open a JupyterLab
 * Go to terminal and create a symbolic link from`` ~/.cache/huggingface`` to ``/home/ec2-user/SageMaker/.cache/huggingface``. This is needed to have enough space for cache (~80 Gb)
     * ``sh-4.2$ mkdir /home/ec2-user/SageMaker/.cache``
     * ``sh-4.2$ mkdir /home/ec2-user/SageMaker/.cache/huggingface``
     * ``sh-4.2$ chmod 777 /home/ec2-user/SageMaker/.cache/huggingface``
     * ``sh-4.2$ ln -s /home/ec2-user/SageMaker/.cache/huggingface .cache/huggingface``
-* Open a notebook
+* Open a notebook. The below steps need to be performed every time you open a notebook (or a lab?)
 * Install requirements from requirements.txt using pip: ``%pip install tqdm transformers datasets huggingface-hub accelerate``
 * Install sagemaker ``%pip install sagemaker --upgrade``
-* Login to Hugging Face from terminal ``huggingface-cli login --token <your token here>``
+* Login to Hugging Face ``!huggingface-cli login --token <your token here>``
 * Open a notebook
-* Run the first snippet from starcoder
+* Run the first snippet from starcoder. Use ``df -h`` command in the terminal to validate that cache is being stored to the ``/home/ec2-user/...`` disk. I got a message that the kernel has died once all downloads completed. It appears to be due to ml.t3.medium being too small for the task.
 
 ## Notes
 
