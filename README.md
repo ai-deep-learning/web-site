@@ -53,6 +53,7 @@ Organization's web site deployed using GitHub Pages.
 * https://huggingface.co/docs/transformers/sagemaker
 * https://github.com/huggingface/notebooks/tree/main/sagemaker
 * https://huggingface.co/pricing - compute for AI
+* https://aws.amazon.com/machine-learning/mlu/
 
 ## Pavel's local 
 
@@ -75,3 +76,35 @@ Organization's web site deployed using GitHub Pages.
 * Login to hugging face: ``huggingface-cli login``
 * Install jupyter: ``pip install jupyter``
 * Start jupyter notebooks: ``jupyter notebook``
+
+It my setup it was giving strange errors about not sufficient memory - unable to allocate 150 Mb and 600 Mb with several Gb available. It happened in both GPU and CPU modes so I suspended by efforts to run it locally.
+
+## SageMaker
+
+Set disk size to 150 Gb
+
+* Create a notebook on ml.t3.medium - 250 hours/months are provided for free for the first 2 months. Customize to have 150 Gb storage
+* Open a JupyterLab
+* Go to terminal and create a symbolic link from`` ~/.cache/huggingface`` to ``/home/ec2-user/SageMaker/.cache/huggingface``. This is needed to have enough space for cache (~80 Gb)
+    * ``sh-4.2$ mkdir /home/ec2-user/SageMaker/.cache``
+    * ``sh-4.2$ mkdir /home/ec2-user/SageMaker/.cache/huggingface``
+    * ``sh-4.2$ chmod 777 /home/ec2-user/SageMaker/.cache/huggingface``
+    * ``sh-4.2$ ln -s /home/ec2-user/SageMaker/.cache/huggingface .cache/huggingface``
+* Open a notebook
+* Install requirements from requirements.txt using pip: ``%pip install tqdm transformers datasets huggingface-hub accelerate``
+* Install sagemaker ``%pip install sagemaker --upgrade``
+* Login to Hugging Face from terminal ``huggingface-cli login --token <your token here>``
+* Open a notebook
+* Run the first snippet from starcoder
+
+## Notes
+
+StarCoder requires ~80 Gb of disk space. As such it cannot be run on Google Colab free tier as is provides "only" 78.2 Gb disk space.
+
+## SageMaker Studio Lab
+
+https://studiolab.sagemaker.aws - requires approval. 
+
+GPU compute - 4 hours per session and 8 hour in 24 hours period. Storage is limited to 15 Gb
+
+
