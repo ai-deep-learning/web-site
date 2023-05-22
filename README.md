@@ -83,7 +83,7 @@ It my setup it was giving strange errors about not sufficient memory - unable to
 
 Set disk size to 150 Gb
 
-* Create a notebook on ml.t3.2xlarge. ml.t3.xlarge and below are too small. I did not try ml.t3.2xlarge yet. Customize to have 150 Gb storage. Note: tried ml.m5.4xlarge, but it was exceeding my quota so I'm trying 2xlarge first. 2x is dying, requested quotas increase at https://us-east-1.console.aws.amazon.com/servicequotas/home/
+* Create a notebook on ml.m5.12xlarge, requested quotas increase at https://us-east-1.console.aws.amazon.com/servicequotas/home/
 * Open a JupyterLab
 * Go to terminal and create a symbolic link from`` ~/.cache/huggingface`` to ``/home/ec2-user/SageMaker/.cache/huggingface``. This is needed to have enough space for cache (~80 Gb)
     * ``sh-4.2$ mkdir /home/ec2-user/SageMaker/.cache``
@@ -95,7 +95,7 @@ Set disk size to 150 Gb
 * Install sagemaker ``%pip install sagemaker --upgrade``
 * Login to Hugging Face ``!huggingface-cli login --token <your token here>``
 * Open a notebook
-* Run the first snippet from starcoder. Use ``df -h`` command in the terminal to validate that cache is being stored to the ``/home/ec2-user/...`` disk. I got a message that the kernel has died once all downloads completed. It appears to be due to ml.t3.medium being too small for the task.
+* Run the first snippet from starcoder with ``cpu`` as device - kernel dies with ``cuda``. Use ``df -h`` command in the terminal to validate that cache is being stored to the ``/home/ec2-user/...`` disk. I got a message that the kernel has died once all downloads completed. It appears to be due to ml.t3.medium being too small for the task.
 
 ## Notes
 
@@ -106,5 +106,31 @@ StarCoder requires ~80 Gb of disk space. As such it cannot be run on Google Cola
 https://studiolab.sagemaker.aws - requires approval. 
 
 GPU compute - 4 hours per session and 8 hour in 24 hours period. Storage is limited to 15 Gb
+
+## GCP
+
+https://cloud.google.com/compute/all-pricing
+
+$300 credit?
+
+Ability to custom-built a VM - CPU's, RAM, GPU's.
+
+https://towardsdatascience.com/running-jupyter-notebook-in-google-cloud-platform-in-15-min-61e16da34d52
+
+https://repo.anaconda.com/archive/Anaconda3-2023.03-1-Linux-x86_64.sh
+
+Default limit 24 vCPU's per region per project - can request quota increase.
+
+E2 highmem - 16 vCPU's, 128 Gb mem
+
+Developer friendly - convenient observability
+
+* Download Google SDK and install in the local environment
+* Open SSH 
+    * ``pip install tqdm transformers datasets huggingface-hub accelerate``
+    * ``huggingface-cli login --token <your token here>``
+    * ``python``
+    * https://github.com/bigcode-project/starcoder - code snippets line by line, device - cpu
+
 
 
